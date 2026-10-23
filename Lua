@@ -1,0 +1,205 @@
+local me = game.Players.LocalPlayer
+local root = me.Character and me.Character:FindFirstChild('HumanoidRootPart')
+if root then root.Anchored = true end
+local offset = Vector3.new(0, 0, 0)
+local origin = CFrame.new()
+local tool
+for _,v in ipairs(me:GetDescendants()) do if v.Name == 'SyncAPI' then tool = v.Parent break end end
+if not tool then for _,v in ipairs(game.ReplicatedStorage:GetDescendants()) do if v.Name == 'SyncAPI' then tool = v.Parent break end end end
+if not tool then warn('yo ur not have f3x') return end
+local syncApi = tool:FindFirstChild('SyncAPI')
+local remote = syncApi and syncApi:FindFirstChild('ServerEndpoint')
+if not remote then warn('no server endpoint found') return end
+local function _(args)
+    if not remote then return end
+    if remote:IsA('RemoteEvent') then
+        pcall(remote.FireServer, remote, unpack(args))
+    else
+        task.spawn(pcall, remote.InvokeServer, remote, unpack(args))
+end
+end
+function CreatePart(partType, cf, parent)
+    if not remote then return nil end
+    local worldCF = (origin + offset) * cf
+    local success, part = pcall(function() return remote:InvokeServer('CreatePart', partType, worldCF, parent) end)
+    return success and part or nil
+end
+function MovePart(part, cf) if not part then return end local worldCF = (origin + offset) * cf _({'SyncMove', {{['Part'] = part, ['CFrame'] = worldCF}}}) end
+function Resize(part, size, cf) if not part then return end local worldCF = (origin + offset) * cf _({'SyncResize', {{['Part'] = part, ['CFrame'] = worldCF, ['Size'] = size}}}) end
+function SetTrans(part, int) if not part then return end _({'SyncMaterial', {{['Part'] = part, ['Transparency'] = int}}}) end
+function Setmate(part, int) if not part then return end _({'SyncMaterial', {{['Part'] = part, ['Material'] = int}}}) end
+function Color(part, color) if not part then return end _({'SyncColor', {{['Part'] = part, ['Color'] = color, ['UnionColoring'] = false}}}) end
+function SetAnchor(boolean, part) if not part then return end _({'SyncAnchor', {{['Part'] = part, ['Anchored'] = boolean}}}) end
+function SetCollision(part, boolean) if not part then return end _({'SyncCollision', {{['Part'] = part, ['CanCollide'] = boolean}}}) end
+function AddMesh(part) if not part then return end _({'CreateMeshes', {{['Part'] = part}}}) end
+function SetMesh(part, meshid) if not part then return end _({'SyncMesh', {{['Part'] = part, ['MeshId'] = 'rbxassetid://' .. meshid}}}) end
+function SpawnDecal(part, side) if not part then return end _({'CreateTextures', {{['Part'] = part, ['Face'] = side, ['TextureType'] = 'Decal'}}}) end
+function AddDecal(part, asset, side) if not part then return end _({'SyncTexture', {{['Part'] = part, ['Face'] = side, ['TextureType'] = 'Decal', ['Texture'] = 'rbxassetid://' .. asset}}}) end
+function MeshResize(part, size) if not part then return end _({'SyncMesh', {{['Part'] = part, ['Scale'] = size}}}) end
+function SetName(part, stringg) if not part then return end _({'SetName', {part}, stringg}) end
+function vect(part, of) if not part then return end _({'SyncMesh', {{['Part'] = part, ['Offset'] = of}}}) end
+function reflect(part, int) if not part then return end _({'SyncMaterial', {{['Part'] = part, ['Reflectance'] = int}}}) end
+function SetMeshtype(part, type) if not part then return end _({'SyncMesh', {{['Part'] = part, ['MeshType'] = type}}}) end
+local generatedParts = {}
+task.wait(0.1)
+-- Copy Lighting HD ADMIN commands
+local hdSignals = game:GetService('ReplicatedStorage'):FindFirstChild('HDAdminClient') and game:GetService('ReplicatedStorage').HDAdminClient:FindFirstChild('Signals')
+local hdRemote = hdSignals and hdSignals:FindFirstChild('RequestCommand')
+if hdRemote then
+    pcall(function() hdRemote:InvokeServer(';time 14.00') end)
+    pcall(function() hdRemote:InvokeServer(';fog 100000') end)
+    pcall(function() hdRemote:InvokeServer(';fogcolor 192 192 192') end)
+end
+local partsToDelete = {}
+for _, v in ipairs(workspace:GetDescendants()) do
+    if v:IsA('BasePart') and v.Name ~= 'Terrain' then
+        local isPlrPart = false
+        for _, p in ipairs(game.Players:GetPlayers()) do
+            if p.Character and v:IsDescendantOf(p.Character) then
+                isPlrPart = true
+                break
+            end
+        end
+        if not isPlrPart then
+            table.insert(partsToDelete, v)
+        end
+    end
+end
+if #partsToDelete > 0 then
+    pcall(function() _({'Remove', partsToDelete}) end)
+end
+task.wait(0.5)
+local resizes = {}
+local colors = {}
+local materials = {}
+local anchors = {}
+local collisions = {}
+local names = {}
+task.wait(0.1)
+task.spawn(function() pcall(function() generatedParts[1] = CreatePart("Normal", CFrame.new(148.643, 18.500, -36.140, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[2] = CreatePart("Spawn", CFrame.new(-6.518, 37.500, -37.106, 0.000, 0.000, 1.000, 0.000, 1.000, 0.000, -1.000, 0.000, 0.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[3] = CreatePart("Normal", CFrame.new(183.143, 60.000, -34.640, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[4] = CreatePart("Normal", CFrame.new(158.143, 98.375, -35.987, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[5] = CreatePart("Normal", CFrame.new(134.143, 70.283, -34.882, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[6] = CreatePart("Normal", CFrame.new(182.643, 50.500, -34.640, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+task.spawn(function() pcall(function() generatedParts[7] = CreatePart("Normal", CFrame.new(56.569, 50.500, 18.683, 0.000, -1.000, 0.000, 1.000, 0.000, 0.000, 0.000, 0.000, 1.000), workspace) end) end)
+local maxWait = 3.0
+local start = os.clock()
+while os.clock() - start < maxWait do
+    local completed = true
+    for i = 1, 7 do
+        if not generatedParts[i] then
+            completed = false
+            break
+        end
+    end
+    if completed then break end
+    task.wait(0.05)
+end
+if generatedParts[1] then
+    table.insert(resizes, {['Part'] = generatedParts[1], ['CFrame'] = (origin + offset) * CFrame.new(148.643, 18.500, -36.140, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(377.000, 38.000, 198.000)})
+    table.insert(colors, {['Part'] = generatedParts[1], ['Color'] = Color3.new(0.373, 0.373, 0.373), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[1], ['Material'] = Enum.Material.Concrete, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[1], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[1], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[1], ['Name'] = "Part"})
+end
+if generatedParts[2] then
+    table.insert(resizes, {['Part'] = generatedParts[2], ['CFrame'] = (origin + offset) * CFrame.new(-6.518, 37.500, -37.106, 0.000, 0.000, 1.000, 0.000, 1.000, 0.000, -1.000, 0.000, 0.000), ['Size'] = Vector3.new(50.000, 1.000, 41.000)})
+    table.insert(colors, {['Part'] = generatedParts[2], ['Color'] = Color3.new(0.624, 0.624, 0.631), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[2], ['Material'] = Enum.Material.Plastic, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[2], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[2], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[2], ['Name'] = "SpawnLocation"})
+end
+if generatedParts[3] then
+    table.insert(resizes, {['Part'] = generatedParts[3], ['CFrame'] = (origin + offset) * CFrame.new(183.143, 60.000, -34.640, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(98.000, 45.000, 122.000)})
+    table.insert(colors, {['Part'] = generatedParts[3], ['Color'] = Color3.new(0.106, 0.165, 0.208), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[3], ['Material'] = Enum.Material.Brick, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[3], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[3], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[3], ['Name'] = "Part"})
+end
+if generatedParts[4] then
+    table.insert(resizes, {['Part'] = generatedParts[4], ['CFrame'] = (origin + offset) * CFrame.new(158.143, 98.375, -35.987, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(262.000, 35.000, 153.000)})
+    table.insert(colors, {['Part'] = generatedParts[4], ['Color'] = Color3.new(0.624, 0.624, 0.631), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[4], ['Material'] = Enum.Material.Brick, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[4], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[4], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[4], ['Name'] = "Part"})
+end
+if generatedParts[5] then
+    table.insert(resizes, {['Part'] = generatedParts[5], ['CFrame'] = (origin + offset) * CFrame.new(134.143, 70.283, -34.882, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(4.000, 19.000, 67.000)})
+    table.insert(colors, {['Part'] = generatedParts[5], ['Color'] = Color3.new(0.635, 0.631, 0.643), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[5], ['Material'] = Enum.Material.Plastic, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[5], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[5], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[5], ['Name'] = "Part"})
+end
+if generatedParts[6] then
+    table.insert(resizes, {['Part'] = generatedParts[6], ['CFrame'] = (origin + offset) * CFrame.new(182.643, 50.500, -34.640, 1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(99.000, 32.000, 124.000)})
+    table.insert(colors, {['Part'] = generatedParts[6], ['Color'] = Color3.new(0.106, 0.165, 0.208), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[6], ['Material'] = Enum.Material.Brick, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[6], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[6], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[6], ['Name'] = "Part"})
+end
+if generatedParts[7] then
+    table.insert(resizes, {['Part'] = generatedParts[7], ['CFrame'] = (origin + offset) * CFrame.new(56.569, 50.500, 18.683, 0.000, -1.000, 0.000, 1.000, 0.000, 0.000, 0.000, 0.000, 1.000), ['Size'] = Vector3.new(72.000, 8.000, 10.000)})
+    table.insert(colors, {['Part'] = generatedParts[7], ['Color'] = Color3.new(0.639, 0.635, 0.647), ['UnionColoring'] = false})
+    table.insert(materials, {['Part'] = generatedParts[7], ['Material'] = Enum.Material.Plastic, ['Transparency'] = 0.000, ['Reflectance'] = 0.000})
+    table.insert(anchors, {['Part'] = generatedParts[7], ['Anchored'] = true})
+    table.insert(collisions, {['Part'] = generatedParts[7], ['CanCollide'] = true})
+    table.insert(names, {['Part'] = generatedParts[7], ['Name'] = "Part"})
+end
+task.wait(0.1)
+pcall(function() _({'SyncResize', resizes}) end)
+task.wait(0.35)
+pcall(function() _({'SyncColor', colors}) end)
+task.wait(0.35)
+pcall(function() _({'SyncMaterial', materials}) end)
+task.wait(0.35)
+pcall(function() _({'SyncAnchor', anchors}) end)
+task.wait(0.35)
+pcall(function() _({'SyncCollision', collisions}) end)
+task.wait(0.35)
+for _, v in ipairs(names) do if v.Part then pcall(function() _({'SetName', {v.Part}, v.Name}) end) end end
+if generatedParts[2] then
+    pcall(function() SpawnDecal(generatedParts[2], Enum.NormalId.Top) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[2], "104480379284704", Enum.NormalId.Top) end)
+end
+if generatedParts[4] then
+    pcall(function() AddMesh(generatedParts[4]) end)
+    task.wait(0.15)
+    pcall(function() SetMeshtype(generatedParts[4], Enum.MeshType.Wedge) end)
+    pcall(function() MeshResize(generatedParts[4], Vector3.new(1.000, 1.000, 1.000)) end)
+    pcall(function() vect(generatedParts[4], Vector3.new(0.000, 0.000, 0.000)) end)
+end
+if generatedParts[5] then
+    pcall(function() SpawnDecal(generatedParts[5], Enum.NormalId.Front) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[5], "129474026073183", Enum.NormalId.Front) end)
+    pcall(function() SpawnDecal(generatedParts[5], Enum.NormalId.Left) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[5], "129474026073183", Enum.NormalId.Left) end)
+end
+if generatedParts[6] then
+    pcall(function() SpawnDecal(generatedParts[6], Enum.NormalId.Left) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[6], "116884641905085", Enum.NormalId.Left) end)
+    pcall(function() SpawnDecal(generatedParts[6], Enum.NormalId.Back) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[6], "110562636850852", Enum.NormalId.Back) end)
+    pcall(function() SpawnDecal(generatedParts[6], Enum.NormalId.Front) end)
+    task.wait(0.15)
+    pcall(function() AddDecal(generatedParts[6], "110562636850852", Enum.NormalId.Front) end)
+end
+if generatedParts[7] then
+    pcall(function() AddMesh(generatedParts[7]) end)
+    task.wait(0.15)
+    pcall(function() SetMeshtype(generatedParts[7], Enum.MeshType.Cylinder) end)
+    pcall(function() MeshResize(generatedParts[7], Vector3.new(1.000, 1.000, 1.000)) end)
+    pcall(function() vect(generatedParts[7], Vector3.new(0.000, 0.000, 0.000)) end)
+end
+if root then root.Anchored = false end
